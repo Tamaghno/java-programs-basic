@@ -1,0 +1,1 @@
+file output stream an output stream used for writing data to a file
