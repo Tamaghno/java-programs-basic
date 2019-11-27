@@ -9,20 +9,22 @@ void KMP_Matcher()
     m=strlen(P);
     Compute_Prefix();
     printf("Prefix function :\n");
-    for(i=0;i<m;i++)
+    for(i=1;i<=m;i++)
         printf("%d ",pi[i]);
     printf("\n");
     q=0;
     for(i=1;i<=n;i++)
     {
         while(q>0 && P[q+1]!=T[i])
-            q=pi[q];
+        {
+        q=pi[q];
         if(P[q+1]==T[i])
             q=q+1;
-        if(q==m-1)
+        if(q==m)
         {
-            printf("\nPattern occurs with shift s = %d",(i-m+1));
+            printf("\nPattern occurs with shift s = %d",(i-m));
             q=pi[q];
+        }
         }
     }
 }
@@ -32,7 +34,7 @@ void Compute_Prefix()
     m=strlen(P);
     pi[1]=0;
     k=0;
-    for(q=2;q<m;q++)
+    for(q=2;q<=m;q++)
     {
         while(k>0 && P[k+1]!=P[q])
             k=pi[k];

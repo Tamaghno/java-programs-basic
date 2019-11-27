@@ -1,48 +1,68 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
-void main()
+
+void KMPSearch(char* pat, char* txt) 
 {
-char str[30], pattern[30];
-printf("\nEnter a String:\t");
-scanf("%s", str);
-printf("\nEnter a Pattern to Match:\t");
-scanf("%s", pattern);
-kmp_matcher(str,pattern);
+    int M = strlen(pat);
+    int N = strlen(txt); 
+    int lps[M];
+    computeLPSArray(pat, M, lps);
+    int i = 0;
+    int j = 0;
+    while (i < N) {
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+        if (j == M) {
+            printf("Found pattern at index %d ", i - j);
+            j = lps[j - 1];
+        }
+        else if (i < N && pat[j] != txt[i]) {
+            if (j != 0)
+                j = lps[j - 1]; 
+            else
+                i = i + 1;
+        }
+    }
+}
+void computeLPSArray(char* pat, int M, int* lps) 
+{
+    printf("\nLPS\n");
+    int len = 0;
+    lps[0] = 0;
+    int i = 1;
+    while (i < M) {
+        if (pat[i] == pat[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        }
+        else 
+        {
+            if (len != 0) { 
+                len = lps[len - 1]; 
+            } 
+            else
+            {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+for(int i=0;i<M;i++)
+printf("%d  ",lps[i]);
+printf("\n");
 }
 
-
-kmp_matcher(char t[],char p[])
+int main()
 {
-int pi[50];
-int n=strlen(t);
-int m=strlen(p);
-int pi=computeprefixfunction(p);
-int q=0;
-int i;
-for(i=1;i<=n;i++)
-{while(q>0 && p[q+1]!=t[i])
-q=pi[q];
-if(p[q+1]==t[i])
-q=q+1;
-if(q==m)
-{printf("pattern occurs with shift %d",(i-m));
-q=pi[q];}
-}}
-
-
-
-computeprefixfunction(char p[])
-{
-int m=strlen(p);
-pi[1]=0;
-k=0;
-for(q=2;q<=m;q++)
-{
-while(k>0 && p[k+1]!=p[q])
-k=pi[k];
-if(p[k+1]==p[q])
-k=k+1;
-pi[q]=k;}
-return pi;
+    char txt[30], pat[30];
+      printf("\nEnter a String:\t");
+      scanf("%s", txt);
+      printf("\nEnter a Pattern to Match:\t");
+      scanf("%s", pat);
+    KMPSearch(pat, txt);
+    return 0;
 }
